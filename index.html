@@ -1,0 +1,47 @@
+<!--
+Author: Rohit Kumar
+Website: http://iamrohit.in
+Date: 09-08-2017
+AppName: url2img
+ -->
+<title>Simple, lightweight jQuery Program to get website screenshots</title>
+<div style="text-align:center; width:80%; margin:0 auto;">
+<h3>Simple, lightweight jQuery Program to get website screenshots</h3>
+<b>Enter Full Website URL:</b><br/>
+<input type="text" id="url" placeholder="http://www.iamrohit.in"> 
+<br/>
+<button id="url2img">SUBMIT</button>
+<br/>
+<span id="msg" style="color:red; font-size:18px;"></span> <br/>
+<img src="">
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(function() {
+
+	$('#url2img').click(function(){
+		$("#msg").html("Loading Image Preview Please Wait..");
+		$("img").attr('src', "");
+		var url = $("#url").val();
+		  $.ajax({
+        	url: 'https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + url + '&screenshot=true',
+        	context: this,
+        	type: 'GET',
+        	dataType: 'json',
+        	timeout: 60000,
+        	success: function(result) {
+           		var imgData = result.screenshot.data.replace(/_/g, '/').replace(/-/g, '+');
+            	$("img").attr('src', 'data:image/jpeg;base64,' + imgData);
+            	$("#msg").html('');
+            },
+            error:function(e) {
+            	$("#msg").html("Error to fetch image preview. Please enter full url (eg: http://www.iamrohit.in)");
+            }
+        });
+       
+	});
+
+});
+
+</script>
+
